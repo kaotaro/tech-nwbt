@@ -1,36 +1,43 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
-
   <head>
-    <meta charset='utf-8'>
+    <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="chrome=1">
-    <meta name="description" content="[実習1]Bluetooth機能を制御する : ネットワーク（４）Bluetooth">
+    <title>[実習1]Bluetooth機能を制御する by kaotaro</title>
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script src="javascripts/respond.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <!--[if lt IE 8]>
+    <link rel="stylesheet" href="stylesheets/ie.css">
+    <![endif]-->
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
 
-    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
-
-    <title>[実習1]Bluetooth機能を制御する</title>
   </head>
-
   <body>
+      <div id="header">
+        <nav>
+          <li class="fork"><a href="https://github.com/kaotaro/tech-nwbt">View On GitHub</a></li>
+          <li class="downloads"><a href="https://github.com/kaotaro/tech-nwbt/zipball/master">ZIP</a></li>
+          <li class="downloads"><a href="https://github.com/kaotaro/tech-nwbt/tarball/master">TAR</a></li>
+          <li class="title">DOWNLOADS</li>
+        </nav>
+      </div><!-- end header -->
 
-    <!-- HEADER -->
-    <div id="header_wrap" class="outer">
-        <header class="inner">
-          <a id="forkme_banner" href="https://github.com/kaotaro/tech-nwbt">View on GitHub</a>
+    <div class="wrapper">
 
-          <h1 id="project_title">[実習1]Bluetooth機能を制御する</h1>
-          <h2 id="project_tagline">ネットワーク（４）Bluetooth</h2>
+      <section>
+        <div id="title">
+          <h1>[実習1]Bluetooth機能を制御する</h1>
+          <p>ネットワーク（４）Bluetooth</p>
+          <hr>
+          <span class="credits left">Project maintained by <a href="https://github.com/kaotaro">kaotaro</a></span>
+          <span class="credits right">Hosted on GitHub Pages &mdash; Theme by <a href="https://twitter.com/michigangraham">mattgraham</a></span>
+        </div>
 
-            <section id="downloads">
-              <a class="zip_download_link" href="https://github.com/kaotaro/tech-nwbt/zipball/master">Download this project as a .zip file</a>
-              <a class="tar_download_link" href="https://github.com/kaotaro/tech-nwbt/tarball/master">Download this project as a tar.gz file</a>
-            </section>
-        </header>
-    </div>
-
-    <!-- MAIN CONTENT -->
-    <div id="main_content_wrap" class="outer">
-      <section id="main_content" class="inner">
         <h1>
 <a id="準備" class="anchor" href="#%E6%BA%96%E5%82%99" aria-hidden="true"><span class="octicon octicon-link"></span></a>準備</h1>
 
@@ -51,19 +58,14 @@
 <h2>
 <a id="mainactivityjavaのコードを埋める" class="anchor" href="#mainactivityjava%E3%81%AE%E3%82%B3%E3%83%BC%E3%83%89%E3%82%92%E5%9F%8B%E3%82%81%E3%82%8B" aria-hidden="true"><span class="octicon octicon-link"></span></a>MainActivity.javaのコードを埋める</h2>
 
-<h3>
-<a id="initenablebutton-メソッドを完成させます" class="anchor" href="#initenablebutton-%E3%83%A1%E3%82%BD%E3%83%83%E3%83%89%E3%82%92%E5%AE%8C%E6%88%90%E3%81%95%E3%81%9B%E3%81%BE%E3%81%99" aria-hidden="true"><span class="octicon octicon-link"></span></a>initEnableButton() メソッドを完成させます。</h3>
+<p><strong>initEnableButton()</strong> メソッドを完成させます。</p>
 
-<ol>
-<li>BluetoothAdapterのインスタンス取得をするコードを(en1-1)に書きましょう。</li>
-</ol>
+<p>①BluetoothAdapterのインスタンス取得をするコードを(en1-1)に書きましょう。</p>
 
 <pre><code>btAdapter = BluetoothAdapter.getDefaultAdapter();
 </code></pre>
 
-<ol>
-<li>1.で取得したインスタンスの内容によって処理を分けます。</li>
-</ol>
+<p>②1で取得したインスタンスの状態によって処理を分け、適切なToastや処理を(en1-2)に実装します。</p>
 
 <pre><code>if (btAdapter == null) {
     Toast.makeText(getApplicationContext(),
@@ -83,34 +85,28 @@ if (btAdapter.isEnabled()) {
 }
 </code></pre>
 
-<p>We've crafted some handsome templates for you to use. Go ahead and continue to layouts to browse through them. You can easily go back to edit your page before publishing. After publishing your page, you can revisit the page generator and switch to another theme. Your Page content will be preserved if it remained markdown format.</p>
+<p>③onActivityResultコールバックメソッドを(en1-3) に実装します。
+①で実装したBluetooth機能を有効にするインテントを発行後の結果を受け取ります。</p>
 
-<h3>
-<a id="rather-drive-stick" class="anchor" href="#rather-drive-stick" aria-hidden="true"><span class="octicon octicon-link"></span></a>Rather Drive Stick?</h3>
-
-<p>If you prefer to not use the automatic generator, push a branch named <code>gh-pages</code> to your repository to create a page manually. In addition to supporting regular HTML content, GitHub Pages support Jekyll, a simple, blog aware static site generator written by our own Tom Preston-Werner. Jekyll makes it easy to create site-wide headers and footers without having to copy them across every page. It also offers intelligent blog support and other advanced templating features.</p>
-
-<h3>
-<a id="authors-and-contributors" class="anchor" href="#authors-and-contributors" aria-hidden="true"><span class="octicon octicon-link"></span></a>Authors and Contributors</h3>
-
-<p>You can <a href="https://github.com/blog/821" class="user-mention">@mention</a> a GitHub username to generate a link to their profile. The resulting <code>&lt;a&gt;</code> element will link to the contributor's GitHub Profile. For example: In 2007, Chris Wanstrath (<a href="https://github.com/defunkt" class="user-mention">@defunkt</a>), PJ Hyett (<a href="https://github.com/pjhyett" class="user-mention">@pjhyett</a>), and Tom Preston-Werner (<a href="https://github.com/mojombo" class="user-mention">@mojombo</a>) founded GitHub.</p>
-
-<h3>
-<a id="support-or-contact" class="anchor" href="#support-or-contact" aria-hidden="true"><span class="octicon octicon-link"></span></a>Support or Contact</h3>
-
-<p>Having trouble with Pages? Check out the documentation at <a href="https://help.github.com/pages">https://help.github.com/pages</a> or contact <a href="mailto:support@github.com">support@github.com</a> and we’ll help you sort it out.</p>
+<pre><code>@Override
+protected void onActivityResult(int reqestCode, 
+                int resultCode, Intent data) {
+   if (reqestCode == REQUEST_BT_ENABLE) {
+    if (resultCode == Activity.RESULT_OK) {
+        Toast.makeText(getApplicationContext(),
+            "Bluetoothを有効にしました。”,   Toast.LENGTH_SHORT).show();
+    } else {
+        Toast.makeText(getApplicationContext(), 
+            "Bluetooth有効に失敗しました。",Toast.LENGTH_SHORT).show();
+    }
+    return;
+   }
+}
+</code></pre>
       </section>
-    </div>
 
-    <!-- FOOTER  -->
-    <div id="footer_wrap" class="outer">
-      <footer class="inner">
-        <p class="copyright">[実習1]Bluetooth機能を制御する maintained by <a href="https://github.com/kaotaro">kaotaro</a></p>
-        <p>Published with <a href="https://pages.github.com">GitHub Pages</a></p>
-      </footer>
     </div>
-
+    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
     
-
   </body>
 </html>
