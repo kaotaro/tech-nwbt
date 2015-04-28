@@ -37,7 +37,7 @@
 <p>zipファイルを解答して「BluetoothPractice1」プロジェクトをAndroidStudioで開く。</p>
 
 <h1>
-<a id="1bluetooth機能を有効にする" class="anchor" href="#1bluetooth%E6%A9%9F%E8%83%BD%E3%82%92%E6%9C%89%E5%8A%B9%E3%81%AB%E3%81%99%E3%82%8B" aria-hidden="true"><span class="octicon octicon-link"></span></a>1.Bluetooth機能を有効にする</h1>
+<a id="1-bluetooth機能を有効にする" class="anchor" href="#1-bluetooth%E6%A9%9F%E8%83%BD%E3%82%92%E6%9C%89%E5%8A%B9%E3%81%AB%E3%81%99%E3%82%8B" aria-hidden="true"><span class="octicon octicon-link"></span></a>1. Bluetooth機能を有効にする</h1>
 
 <h2>
 <a id="androidmanifestxml" class="anchor" href="#androidmanifestxml" aria-hidden="true"><span class="octicon octicon-link"></span></a>AndroidManifest.xml</h2>
@@ -58,7 +58,7 @@
 <pre><code>btAdapter = BluetoothAdapter.getDefaultAdapter();
 </code></pre>
 
-<p>② ①で取得したインスタンスの状態によって処理を分け、適切なToastや処理を(en1-2)に実装します。</p>
+<p>② ①で取得したインスタンスの状態によって処理を分け、適切なToastや処理を(en1-2)に書きましょう。</p>
 
 <pre><code>if (btAdapter == null) {
     Toast.makeText(getApplicationContext(),
@@ -95,12 +95,12 @@ protected void onActivityResult(int reqestCode,
 </code></pre>
 
 <h1>
-<a id="2他のbluetooth機器をスキャンする" class="anchor" href="#2%E4%BB%96%E3%81%AEbluetooth%E6%A9%9F%E5%99%A8%E3%82%92%E3%82%B9%E3%82%AD%E3%83%A3%E3%83%B3%E3%81%99%E3%82%8B" aria-hidden="true"><span class="octicon octicon-link"></span></a>2.他のBluetooth機器をスキャンする</h1>
+<a id="2-他のbluetooth機器をスキャンする" class="anchor" href="#2-%E4%BB%96%E3%81%AEbluetooth%E6%A9%9F%E5%99%A8%E3%82%92%E3%82%B9%E3%82%AD%E3%83%A3%E3%83%B3%E3%81%99%E3%82%8B" aria-hidden="true"><span class="octicon octicon-link"></span></a>2. 他のBluetooth機器をスキャンする</h1>
 
 <h2>
 <a id="mainactivityjava-1" class="anchor" href="#mainactivityjava-1" aria-hidden="true"><span class="octicon octicon-link"></span></a>MainActivity.java</h2>
 
-<p><strong>initDiscoverButton()</strong> メソッドを完成させます。</p>
+<p><strong>initDiscoverButton()</strong> メソッド内にコードを書いて完成させます。</p>
 
 <p>① BluetoothAdapterを取得し、もう既に探索中だったら一度キャンセルするコードを(en2-1)に書きましょう。</p>
 
@@ -117,19 +117,17 @@ if (btAdapter.isDiscovering()) {
 <pre><code>btAdapter.startDiscovery();
 </code></pre>
 
-<h3>
-<a id="ブロードキャストレシーバーを実装します" class="anchor" href="#%E3%83%96%E3%83%AD%E3%83%BC%E3%83%89%E3%82%AD%E3%83%A3%E3%82%B9%E3%83%88%E3%83%AC%E3%82%B7%E3%83%BC%E3%83%90%E3%83%BC%E3%82%92%E5%AE%9F%E8%A3%85%E3%81%97%E3%81%BE%E3%81%99" aria-hidden="true"><span class="octicon octicon-link"></span></a>ブロードキャストレシーバーを実装します。</h3>
+<h2>
+<a id="ブロードキャストレシーバーを実装します" class="anchor" href="#%E3%83%96%E3%83%AD%E3%83%BC%E3%83%89%E3%82%AD%E3%83%A3%E3%82%B9%E3%83%88%E3%83%AC%E3%82%B7%E3%83%BC%E3%83%90%E3%83%BC%E3%82%92%E5%AE%9F%E8%A3%85%E3%81%97%E3%81%BE%E3%81%99" aria-hidden="true"><span class="octicon octicon-link"></span></a>ブロードキャストレシーバーを実装します。</h2>
 
-<p>①　ブロードキャストレシーバークラスを作成します。</p>
+<p>① ブロードキャストレシーバークラスを作成します。</p>
 
 <p>MainActivityクラスのインナークラスとして(en2-3)に作成してください。
 このブロードキャストレシーバーは外部機器探索中にBluetooth機器を発見した場合に、アクションインテントを受け取るためのものです。</p>
 
 <p><code>
-ACTION_FOUND：デバイスが発見された場合
-　　→BluetoothDeviceオブジェクトを取り出してListに格納する
-ACTION_DISCOVERY_FINISHED：デバイス検索が終了した場合
-　　→デバイス探索をキャンセルして終了通知をToastで表示する
+ACTION_FOUND：デバイスが発見された場合 → BluetoothDeviceオブジェクトを取り出してListに格納する
+ACTION_DISCOVERY_FINISHED：デバイス検索が終了した場合 → デバイス探索をキャンセルして終了通知をToastで表示する
 </code></p>
 
 <pre><code>private BroadcastReceiver mReceiver = new BroadcastReceiver() {
@@ -173,9 +171,11 @@ ACTION_DISCOVERY_FINISHED：デバイス検索が終了した場合
 };
 </code></pre>
 
-<p>② インテントフィルターを作成して登録します。
-<strong>onCreate</strong>メソッド内
-作成したブロードキャストレシーバーを受け取るためのIntentFilterを作成するコードを(en2-4)に書き、それをシステムに登録するコードを(en2-5)に書きましょう。</p>
+<p>② インテントフィルターを作成して登録します。</p>
+
+<p><strong>onCreate</strong>メソッド内にコードを書きます。</p>
+
+<p>作成したブロードキャストレシーバーを受け取るためのIntentFilterを作成するコードを(en2-4)に書き、それをシステムに登録するコードを(en2-5)に書きましょう。</p>
 
 <pre><code>IntentFilter filter = new IntentFilter();
 filter.addAction(BluetoothAdapter.ACTION_DISCOVERY_FINISHED);
@@ -185,7 +185,7 @@ registerReceiver(mReceiver, filter);
 </code></pre>
 
 <h1>
-<a id="3既にペアリングされたbluetooth機器の情報を取得する" class="anchor" href="#3%E6%97%A2%E3%81%AB%E3%83%9A%E3%82%A2%E3%83%AA%E3%83%B3%E3%82%B0%E3%81%95%E3%82%8C%E3%81%9Fbluetooth%E6%A9%9F%E5%99%A8%E3%81%AE%E6%83%85%E5%A0%B1%E3%82%92%E5%8F%96%E5%BE%97%E3%81%99%E3%82%8B" aria-hidden="true"><span class="octicon octicon-link"></span></a>3.既にペアリングされたBluetooth機器の情報を取得する</h1>
+<a id="3-既にペアリングされたbluetooth機器の情報を取得する" class="anchor" href="#3-%E6%97%A2%E3%81%AB%E3%83%9A%E3%82%A2%E3%83%AA%E3%83%B3%E3%82%B0%E3%81%95%E3%82%8C%E3%81%9Fbluetooth%E6%A9%9F%E5%99%A8%E3%81%AE%E6%83%85%E5%A0%B1%E3%82%92%E5%8F%96%E5%BE%97%E3%81%99%E3%82%8B" aria-hidden="true"><span class="octicon octicon-link"></span></a>3. 既にペアリングされたBluetooth機器の情報を取得する</h1>
 
 <h2>
 <a id="mainactivityjava-2" class="anchor" href="#mainactivityjava-2" aria-hidden="true"><span class="octicon octicon-link"></span></a>MainActivity.java</h2>
@@ -215,7 +215,7 @@ adapter2.notifyDataSetChanged();
 <h2>
 <a id="mainactivityjava-3" class="anchor" href="#mainactivityjava-3" aria-hidden="true"><span class="octicon octicon-link"></span></a>MainActivity.java</h2>
 
-<p><strong>initResButton()</strong>メソッドを完成させる</p>
+<p><strong>initResButton()</strong>メソッド内にコードを書いて完成させます。</p>
 
 <p>① 外部機器から自端末を発見可能にするためのアクションインテントを発行するコードを(en4-1)(en4-2)に書きましょう。</p>
 
