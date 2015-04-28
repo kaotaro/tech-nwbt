@@ -1,0 +1,282 @@
+[実習1]Bluetooth機能を制御する
+
+##############################################
+1.Bluetooth機能を有効にする
+##############################################
+
+①zipファイルを解答して「BluetoothPractice1」プロジェクトをimportする
+
+②AndroidManifest.xmlにパーミッションを追加する
+--------------------------------------------------------------
+<uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/>
+<uses-permission android:name="android.permission.BLUETOOTH"/>
+--------------------------------------------------------------
+
+③MainActivity.javaのコードを埋める
+
+●initEnableButton() メソッドを完成させる
+(en1-1)BluetoothAdapterのインスタンス取得
+--------------------------------------------------------------
+btAdapter = BluetoothAdapter.getDefaultAdapter();
+--------------------------------------------------------------
+
+(en1-2)取り出したインスタンスの内容によって処理を分ける
+(en1-2)-①Bluetooth未サポートの場合はその旨をToastで表示
+--------------------------------------------------------------
+if (btAdapter == null) {
+	Toast.makeText(getApplicationContext(),
+             “この端末はBluetoothがサポートされていません。”,
+　　　　　　　Toast.LENGTH_SHORT).show();
+	return;
+}
+--------------------------------------------------------------
+
+(en1-2)-②Bluetoothが既に有効な場合はその旨をToastで表示
+--------------------------------------------------------------
+if (btAdapter.isEnabled()) {
+	Toast.makeText(getApplicationContext(),
+	  "Bluetoothは既に有効になっています。", Toast.LENGTH_SHORT)
+	  .show();
+}
+--------------------------------------------------------------
+
+(en1-2)-③Bluetoothが無効な場合は有効にする
+--------------------------------------------------------------
+else {
+	// Bluetooth機能を有効にするためのアクションインテントを発行
+	Intent intent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+	// onActivityResultメソッドで結果を受けとるようにする
+	startActivityForResult(intent, REQUEST_BT_ENABLE);
+}
+--------------------------------------------------------------
+
+(en1-3) onActivityResultコールバックメソッドの実装
+--------------------------------------------------------------
+@Override
+protected void onActivityResult(int reqestCode, 
+				int resultCode, Intent data) {
+
+}
+--------------------------------------------------------------
+
+●onActivityResultコールバックメソッド内
+
+(en1-2)-③の応答処理を書く
+--------------------------------------------------------------
+if (reqestCode == REQUEST_BT_ENABLE) {
+	if (resultCode == Activity.RESULT_OK) {
+		Toast.makeText(getApplicationContext(),
+			"Bluetoothを有効にしました。”,	Toast.LENGTH_SHORT).show();
+	} else {
+		Toast.makeText(getApplicationContext(), 
+			"Bluetooth有効に失敗しました。",Toast.LENGTH_SHORT).show();
+	}
+	return;
+}
+--------------------------------------------------------------
+
+##############################################
+2.他のBluetooth機器をスキャンする
+##############################################
+
+①MainActivity.javaのコードを埋める
+
+●initDiscoverButton()メソッドを完成させる
+
+(en2-1)BluetoothAdapterを取得し、もう既に探索中だったら一度キャンセルする
+--------------------------------------------------------------
+if (btAdapter == null) {
+	btAdapter = BluetoothAdapter.getDefaultAdapter();
+}
+if (btAdapter.isDiscovering()) {
+	btAdapter.cancelDiscovery();
+}
+--------------------------------------------------------------
+
+(en2-2)外部機器探索開始
+--------------------------------------------------------------
+btAdapter.startDiscovery();
+--------------------------------------------------------------
+
+●ブロードキャストレシーバークラス生成
+
+(en2-3)外部機器探索中に発見した場合に受け取るアクションインテントを受け取るための
+ブロードキャストレシーバークラス作成
+ACTION_FOUND：デバイスが発見された場合
+　　→BluetoothDeviceオブジェクトを取り出してListに格納する
+ACTION_DISCOVERY_FINISHED：デバイス検索が終了した場合
+　　→デバイス探索をキャンセルして終了通知をToastで表示する
+--------------------------------------------------------------
+private BroadcastReceiver mReceiver = new BroadcastReceiver() {
+  public void onReceive(Context context, Intent intent) {
+    // 受け取ったアクションを取り出す
+    String action = intent.getAction();
+	
+    if (BluetoothDevice.ACTION_FOUND.equals(action)) {		
+      // BluetoothDeviceオブジェクトを取り出してListに格納する
+        BluetoothDevice device =
+            intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
+      newDeviceList.add(device);
+    }else if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action)) {
+
+ 	 // デバイス探索をキャンセルして終了通知をToastで表示する
+
+  	btAdapter.cancelDiscovery();
+  	Toast.makeText(getApplicationContext(), 
+          “外部機器を探索開始終了しました”,Toast.LENGTH_SHORT).show();
+
+  	// Listに格納してあるBluetoothDeviceオブジェクトから
+  	// デバイスの名前を取り出して	
+  	// ListViewにセットしてあるアダプタに追加し、リスト表示を更新する
+
+  	adapter.clear();
+  	if (newDeviceList.size() == 0) {
+		adapter.add("デバイスがありません");
+  	}
+  	for (BluetoothDevice device : newDeviceList) {
+    	String name = device.getName();
+    	Log.i("MainActivity", "デバイス名 = " + name);
+    	adapter.add(name);
+  	}
+  	adapter.notifyDataSetChanged();
+	  
+	// レシーバーをシステムから登録解除する
+    if (mReceiver != null) {
+	  unregisterReceiver(mReceiver);
+	  mReceiver = null;
+    }
+   }
+  }
+};
+--------------------------------------------------------------
+
+●onCreateコールバックメソッド内
+
+(en2-4)外部機器探索状態のアクションインテントを受け取るためのIntentFilter生成
+--------------------------------------------------------------
+IntentFilter filter = new IntentFilter();
+filter.addAction(BluetoothAdapter.ACTION_DISCOVERY_FINISHED);
+filter.addAction(BluetoothDevice.ACTION_FOUND);
+--------------------------------------------------------------
+
+(en2-5)IntentFilterとレシーバーをシステムに登録する
+--------------------------------------------------------------
+registerReceiver(mReceiver, filter);
+--------------------------------------------------------------
+
+##############################################
+3.既にペアリングされたBluetooth機器の情報を取得する
+##############################################
+
+①MainActivity.javaのコードを埋める
+
+●initBoundedButton()メソッドを完成させる
+
+(en３-1)ペアリング済みの端末情報一覧を取得する
+--------------------------------------------------------------
+Set<BluetoothDevice> boundedDevices = btAdapter.getBondedDevices();
+--------------------------------------------------------------
+
+(en３-2)リスト表示するためにアダプタにセットする
+--------------------------------------------------------------
+adapter2.clear();
+if (boundedDevices.size() == 0) {
+	adapter2.add("ペアリング済み端末なし");
+}
+for (BluetoothDevice device : boundedDevices) {
+	adapter2.add(device.getName());
+}
+adapter2.notifyDataSetChanged();
+--------------------------------------------------------------
+
+##############################################
+4.外部機器のデバイスのスキャンに対して応答する
+##############################################
+
+①MainActivity.javaのコードを埋める
+
+●initResButton()メソッドを完成させる
+
+(en4-1)外部機器から自端末を発見可能にするためのアクションインテントを発行
+--------------------------------------------------------------
+Intent intent = new Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE);
+--------------------------------------------------------------
+
+(en4-2) onActivityResultメソッドで結果を受けとるようにする
+--------------------------------------------------------------
+startActivityForResult(intent, REQUEST_BT_DISCOVERABLE);
+--------------------------------------------------------------
+
+●onActivityResult()コールバックメソッド内に追加する
+(en4-2)の応答処理
+--------------------------------------------------------------
+if (reqestCode == REQUEST_BT_DISCOVERABLE) {
+	if (resultCode == Activity.RESULT_CANCELED) {
+	  Toast.makeText(getApplicationContext(),
+          "端末は探索可能な状態ではありません”,
+	    Toast.LENGTH_SHORT).show();
+	} else {
+	  Toast.makeText(getApplicationContext(),
+	    resultCode + "秒間外部機器から探索可能状態です",
+           Toast.LENGTH_SHORT).show();
+	}
+}
+--------------------------------------------------------------
+
+##############################################
+5.Bluetooth対応機器の情報表示
+##############################################
+
+①MainActivity.javaのコードを埋める
+
+●MainActivityクラスの宣言部分
+
+(5-1)ListViewのアイテムクリックイベントを取得できるようにするために、
+MainActivityクラスにOnItemClickListenerをimplementsする
+--------------------------------------------------------------
+public class MainActivity extends Activity implements OnItemClickListener {
+--------------------------------------------------------------
+
+(en5-2) OnItemClickListenerのonItemClickコールバックメソッドをオーバーライドする
+--------------------------------------------------------------
+@Override
+public void onItemClick(AdapterView<?> parent, View view, 
+　　　　　　　　　　　　　　　　　　　　　int position,long id) {
+
+}
+--------------------------------------------------------------
+
+●onItemClickコールバックメソッド内の実装
+
+(5-3)クリックされた端末名の端末情報(端末名とMACアドレス)をトーストに表示する
+--------------------------------------------------------------
+ListView listView = (ListView) parent;
+String deviceName = (String) listView.getAdapter().getItem(position);
+for (BluetoothDevice device : newDeviceList) {
+	if (device.getName().equals(deviceName)) {
+	  Toast.makeText(getApplicationContext(),
+						          "端末名 = " + device.getName() + 
+		   " ¥nMAC ADDRESS = " + device.getAddress(),
+		   Toast.LENGTH_SHORT).show();
+	  break;
+	}
+}
+--------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

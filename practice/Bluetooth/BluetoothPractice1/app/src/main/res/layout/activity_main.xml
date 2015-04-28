@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical" >
+
+    <Button
+        android:id="@+id/enable_button"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_margin="5dp"
+        android:text="@string/bt_enable" >
+    </Button>
+
+    <Button
+        android:id="@+id/discover_button"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_margin="5dp"
+        android:text="@string/bt_discover" >
+    </Button>
+
+    <ListView
+        android:id="@+id/device_list"
+        android:layout_width="match_parent"
+        android:layout_height="130dp" >
+    </ListView>
+
+    
+        <Button
+        android:id="@+id/bounded_button"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_margin="5dp"
+        android:text="@string/bt_bounded" >
+    </Button>
+
+    <ListView
+        android:id="@+id/bounded_list"
+        android:layout_width="match_parent"
+        android:layout_height="130dp" >
+    </ListView>
+    
+     <Button
+        android:id="@+id/res_button"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_margin="5dp"
+        android:text="@string/bt_res" >
+    </Button>
+   
+    
+</LinearLayout>

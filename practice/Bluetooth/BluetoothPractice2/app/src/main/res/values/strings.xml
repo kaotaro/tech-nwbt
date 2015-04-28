@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">BTPractice2</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="bt_enable">Bluetooth ON</string>
+    <string name="bt_discover">デバイス検索</string>
+    <string name="bt_bounded">ペアリング済み端末取得</string>
+    <string name="bt_res">デバイス検索応答</string>
+    <string name="send">送信</string>
+    <string name="not_connected">未接続</string>
+    <string name="connecting">接続中</string>
+    <string name="connected_to">に接続済み</string>
+    <string name="device_select">接続先デバイス選択</string>
+</resources>
