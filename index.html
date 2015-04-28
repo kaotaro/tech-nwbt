@@ -124,14 +124,15 @@ if (btAdapter.isDiscovering()) {
 
 <p>① ブロードキャストレシーバークラスを作成します。</p>
 
-<p>MainActivityクラスのインナークラスとして(en2-3)に作成してください。
-このブロードキャストレシーバーは外部機器探索中にBluetooth機器を発見した場合に、アクションインテントを受け取るためのものです。</p>
+<p>このブロードキャストレシーバーは外部機器探索中にBluetooth機器を発見した場合に、アクションインテントを受け取るためのものです。</p>
 
 <pre><code>ACTION_FOUND：デバイスが発見された場合
  → BluetoothDeviceオブジェクトを取り出してListに格納する
 ACTION_DISCOVERY_FINISHED：デバイス検索が終了した場合
  → デバイス探索をキャンセルして終了通知をToastで表示する
 </code></pre>
+
+<p>MainActivityクラスのインナークラスとして(en2-3)に作成してください。</p>
 
 <pre><code>private BroadcastReceiver mReceiver = new BroadcastReceiver() {
 
