@@ -1,43 +1,36 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
+
   <head>
-    <meta charset="utf-8">
+    <meta charset='utf-8'>
     <meta http-equiv="X-UA-Compatible" content="chrome=1">
-    <title>[実習1]Bluetooth機能を制御する by kaotaro</title>
-    <link rel="stylesheet" href="stylesheets/styles.css">
-    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
-    <script src="javascripts/respond.js"></script>
-    <!--[if lt IE 9]>
-      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
-    <!--[if lt IE 8]>
-    <link rel="stylesheet" href="stylesheets/ie.css">
-    <![endif]-->
-    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <meta name="description" content="[実習1]Bluetooth機能を制御する : ネットワーク（４）Bluetooth">
 
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+
+    <title>[実習1]Bluetooth機能を制御する</title>
   </head>
+
   <body>
-      <div id="header">
-        <nav>
-          <li class="fork"><a href="https://github.com/kaotaro/tech-nwbt">View On GitHub</a></li>
-          <li class="downloads"><a href="https://github.com/kaotaro/tech-nwbt/zipball/master">ZIP</a></li>
-          <li class="downloads"><a href="https://github.com/kaotaro/tech-nwbt/tarball/master">TAR</a></li>
-          <li class="title">DOWNLOADS</li>
-        </nav>
-      </div><!-- end header -->
 
-    <div class="wrapper">
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/kaotaro/tech-nwbt">View on GitHub</a>
 
-      <section>
-        <div id="title">
-          <h1>[実習1]Bluetooth機能を制御する</h1>
-          <p>ネットワーク（４）Bluetooth</p>
-          <hr>
-          <span class="credits left">Project maintained by <a href="https://github.com/kaotaro">kaotaro</a></span>
-          <span class="credits right">Hosted on GitHub Pages &mdash; Theme by <a href="https://twitter.com/michigangraham">mattgraham</a></span>
-        </div>
+          <h1 id="project_title">[実習1]Bluetooth機能を制御する</h1>
+          <h2 id="project_tagline">ネットワーク（４）Bluetooth</h2>
 
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/kaotaro/tech-nwbt/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/kaotaro/tech-nwbt/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
         <h1>
 <a id="準備" class="anchor" href="#%E6%BA%96%E5%82%99" aria-hidden="true"><span class="octicon octicon-link"></span></a>準備</h1>
 
@@ -69,26 +62,24 @@
 
 <pre><code>if (btAdapter == null) {
     Toast.makeText(getApplicationContext(),
-             “この端末はBluetoothがサポートされていません。”,
-　　　　　　　Toast.LENGTH_SHORT).show();
+             “この端末はBluetoothがサポートされていません”, Toast.LENGTH_SHORT).show();
     return;
 }
 if (btAdapter.isEnabled()) {
     Toast.makeText(getApplicationContext(),
-      "Bluetoothは既に有効になっています。", Toast.LENGTH_SHORT)
-      .show();
+      "Bluetoothは既に有効になっています", Toast.LENGTH_SHORT).show();
 }else {
     Intent intent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
     startActivityForResult(intent, REQUEST_BT_ENABLE);
 }
 </code></pre>
 
-<p>③onActivityResultコールバックメソッドを(en1-3) に実装します。
-①で実装したBluetooth機能を有効にするインテントを発行後の結果を受け取ります。</p>
+<p>③onActivityResultコールバックメソッドを(en1-3) に実装します。①で実装したBluetooth機能を有効にするインテントを発行後の結果を受け取ります。</p>
 
 <pre><code>@Override
 protected void onActivityResult(int reqestCode, 
                 int resultCode, Intent data) {
+
    if (reqestCode == REQUEST_BT_ENABLE) {
     if (resultCode == Activity.RESULT_OK) {
         Toast.makeText(getApplicationContext(),
@@ -99,6 +90,7 @@ protected void onActivityResult(int reqestCode,
     }
     return;
    }
+
 }
 </code></pre>
 
@@ -139,15 +131,21 @@ ACTION_DISCOVERY_FINISHED：デバイス検索が終了した場合
 　　→デバイス探索をキャンセルして終了通知をToastで表示する</p>
 
 <pre><code>private BroadcastReceiver mReceiver = new BroadcastReceiver() {
+
   @Override
   public void onReceive(Context context, Intent intent) {
 
     String action = intent.getAction(); 
-    if (BluetoothDevice.ACTION_FOUND.equals(action)) {      
+
+    if (BluetoothDevice.ACTION_FOUND.equals(action)) {  
+
         BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
         newDeviceList.add(device);
-    }else if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action)) {
+
+    } else if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action)) {
+
     btAdapter.cancelDiscovery();
+
     Toast.makeText(getApplicationContext(), 
           “外部機器を探索開始終了しました”,Toast.LENGTH_SHORT).show();
 
@@ -166,14 +164,120 @@ ACTION_DISCOVERY_FINISHED：デバイス検索が終了した場合
       unregisterReceiver(mReceiver);
       mReceiver = null;
         }
+
    }
   }
+
 };
 </code></pre>
-      </section>
 
+<p><strong>onCreate</strong>メソッド内
+作成したブロードキャストレシーバーを受け取るためのIntentFilterを作成するコードを(en2-4)に書き、それをシステムに登録するコードを(en2-5)に書きましょう。</p>
+
+<pre><code>IntentFilter filter = new IntentFilter();
+filter.addAction(BluetoothAdapter.ACTION_DISCOVERY_FINISHED);
+filter.addAction(BluetoothDevice.ACTION_FOUND);
+
+registerReceiver(mReceiver, filter);
+</code></pre>
+
+<h1>
+<a id="既にペアリングされたbluetooth機器の情報を取得する" class="anchor" href="#%E6%97%A2%E3%81%AB%E3%83%9A%E3%82%A2%E3%83%AA%E3%83%B3%E3%82%B0%E3%81%95%E3%82%8C%E3%81%9Fbluetooth%E6%A9%9F%E5%99%A8%E3%81%AE%E6%83%85%E5%A0%B1%E3%82%92%E5%8F%96%E5%BE%97%E3%81%99%E3%82%8B" aria-hidden="true"><span class="octicon octicon-link"></span></a>既にペアリングされたBluetooth機器の情報を取得する</h1>
+
+<h2>
+<a id="mainactivityjava-2" class="anchor" href="#mainactivityjava-2" aria-hidden="true"><span class="octicon octicon-link"></span></a>MainActivity.java</h2>
+
+<p><strong>initBoundedButton()</strong> メソッドを完成させます。</p>
+
+<p>①ペアリング済みの端末情報一覧を取得するコードを(en３-1)に書きましょう。</p>
+
+<pre><code>Set&lt;BluetoothDevice&gt; boundedDevices = btAdapter.getBondedDevices();
+</code></pre>
+
+<p>②①で取得した一覧をリスト表示するためにアダプタにセットするコードを(en３-2)に書きましょう。</p>
+
+<pre><code>adapter2.clear();
+if (boundedDevices.size() == 0) {
+    adapter2.add("ペアリング済み端末なし");
+}
+for (BluetoothDevice device : boundedDevices) {
+    adapter2.add(device.getName());
+}
+adapter2.notifyDataSetChanged();
+</code></pre>
+
+<h1>
+<a id="外部機器のデバイスのスキャンに対して応答する" class="anchor" href="#%E5%A4%96%E9%83%A8%E6%A9%9F%E5%99%A8%E3%81%AE%E3%83%87%E3%83%90%E3%82%A4%E3%82%B9%E3%81%AE%E3%82%B9%E3%82%AD%E3%83%A3%E3%83%B3%E3%81%AB%E5%AF%BE%E3%81%97%E3%81%A6%E5%BF%9C%E7%AD%94%E3%81%99%E3%82%8B" aria-hidden="true"><span class="octicon octicon-link"></span></a>外部機器のデバイスのスキャンに対して応答する</h1>
+
+<h2>
+<a id="mainactivityjava-3" class="anchor" href="#mainactivityjava-3" aria-hidden="true"><span class="octicon octicon-link"></span></a>MainActivity.java</h2>
+
+<p><strong>initResButton()</strong>メソッドを完成させる</p>
+
+<p>①外部機器から自端末を発見可能にするためのアクションインテントを発行するコードを(en4-1)(en4-2)に書きましょう。</p>
+
+<pre><code>Intent intent = new Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE);
+startActivityForResult(intent, REQUEST_BT_DISCOVERABLE);
+</code></pre>
+
+<p>②で実装した外部機器から自端末を発見可能にするためのアクションインテントを発行後の結果をonActivityResultで受け取るようなコードをonActivityResultメソッド内に書きましょう。</p>
+
+<pre><code>if (reqestCode == REQUEST_BT_DISCOVERABLE) {
+    if (resultCode == Activity.RESULT_CANCELED) {
+      Toast.makeText(getApplicationContext(),
+          "端末は探索可能な状態ではありません”,
+        Toast.LENGTH_SHORT).show();
+    } else {
+      Toast.makeText(getApplicationContext(),
+        resultCode + "秒間外部機器から探索可能状態です",
+           Toast.LENGTH_SHORT).show();
+    }
+}
+</code></pre>
+
+<h1>
+<a id="bluetooth対応機器の情報表示" class="anchor" href="#bluetooth%E5%AF%BE%E5%BF%9C%E6%A9%9F%E5%99%A8%E3%81%AE%E6%83%85%E5%A0%B1%E8%A1%A8%E7%A4%BA" aria-hidden="true"><span class="octicon octicon-link"></span></a>Bluetooth対応機器の情報表示</h1>
+
+<h2>
+<a id="mainactivityjava-4" class="anchor" href="#mainactivityjava-4" aria-hidden="true"><span class="octicon octicon-link"></span></a>MainActivity.java</h2>
+
+<p>①ListViewのアイテムクリックイベントを取得できるようにするために、MainActivityクラスにOnItemClickListenerをimplementsします。(5-1)</p>
+
+<pre><code>public class MainActivity extends Activity implements OnItemClickListener {
+</code></pre>
+
+<p>②OnItemClickListenerのonItemClickコールバックメソッドをオーバーライドし、その中にクリックされた端末名の端末情報(端末名とMACアドレス)をトーストに表示するコードを書きましょう。(5-2)(5-3)</p>
+
+<pre><code>@Override
+public void onItemClick(AdapterView&lt;?&gt; parent, View view, 
+　　　　　　　　　　　　　　　　　　　　　int position,long id) {
+    ListView listView = (ListView) parent;
+    String deviceName = (String) listView.getAdapter().getItem(position);
+    for (BluetoothDevice device : newDeviceList) {
+    if (device.getName().equals(deviceName)) {
+      Toast.makeText(getApplicationContext(), "端末名 = " + device.getName() + 
+           " ¥nMAC ADDRESS = " + device.getAddress(),
+           Toast.LENGTH_SHORT).show();
+      break;
+        }
+    }
+}
+</code></pre>
+
+<h1>
+<a id="ここまでできたら確認" class="anchor" href="#%E3%81%93%E3%81%93%E3%81%BE%E3%81%A7%E3%81%A7%E3%81%8D%E3%81%9F%E3%82%89%E7%A2%BA%E8%AA%8D" aria-hidden="true"><span class="octicon octicon-link"></span></a>ここまでできたら確認！</h1>
+      </section>
     </div>
-    <!--[if !IE]><script>fixScale(document);</script><![endif]-->
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">[実習1]Bluetooth機能を制御する maintained by <a href="https://github.com/kaotaro">kaotaro</a></p>
+        <p>Published with <a href="https://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
     
+
   </body>
 </html>
