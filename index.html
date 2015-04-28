@@ -31,13 +31,13 @@
     <!-- MAIN CONTENT -->
     <div id="main_content_wrap" class="outer">
       <section id="main_content" class="inner">
-        <h3>
-<a id="準備" class="anchor" href="#%E6%BA%96%E5%82%99" aria-hidden="true"><span class="octicon octicon-link"></span></a>準備</h3>
+        <h1>
+<a id="準備" class="anchor" href="#%E6%BA%96%E5%82%99" aria-hidden="true"><span class="octicon octicon-link"></span></a>準備</h1>
 
 <p>zipファイルを解答して「BluetoothPractice1」プロジェクトをAndroidStudioで開く。</p>
 
-<h3>
-<a id="1bluetooth機能を有効にする" class="anchor" href="#1bluetooth%E6%A9%9F%E8%83%BD%E3%82%92%E6%9C%89%E5%8A%B9%E3%81%AB%E3%81%99%E3%82%8B" aria-hidden="true"><span class="octicon octicon-link"></span></a>1.Bluetooth機能を有効にする</h3>
+<h1>
+<a id="1bluetooth機能を有効にする" class="anchor" href="#1bluetooth%E6%A9%9F%E8%83%BD%E3%82%92%E6%9C%89%E5%8A%B9%E3%81%AB%E3%81%99%E3%82%8B" aria-hidden="true"><span class="octicon octicon-link"></span></a>1.Bluetooth機能を有効にする</h1>
 
 <h2>
 <a id="androidmanifestxml" class="anchor" href="#androidmanifestxml" aria-hidden="true"><span class="octicon octicon-link"></span></a>AndroidManifest.xml</h2>
@@ -48,10 +48,40 @@
 &lt;uses-permission android:name="android.permission.BLUETOOTH"/&gt;
 </code></pre>
 
-<p>If you're using the GitHub for Mac, simply sync your repository and you'll see the new branch.</p>
+<h2>
+<a id="mainactivityjavaのコードを埋める" class="anchor" href="#mainactivityjava%E3%81%AE%E3%82%B3%E3%83%BC%E3%83%89%E3%82%92%E5%9F%8B%E3%82%81%E3%82%8B" aria-hidden="true"><span class="octicon octicon-link"></span></a>MainActivity.javaのコードを埋める</h2>
 
 <h3>
-<a id="designer-templates" class="anchor" href="#designer-templates" aria-hidden="true"><span class="octicon octicon-link"></span></a>Designer Templates</h3>
+<a id="initenablebutton-メソッドを完成させます" class="anchor" href="#initenablebutton-%E3%83%A1%E3%82%BD%E3%83%83%E3%83%89%E3%82%92%E5%AE%8C%E6%88%90%E3%81%95%E3%81%9B%E3%81%BE%E3%81%99" aria-hidden="true"><span class="octicon octicon-link"></span></a>initEnableButton() メソッドを完成させます。</h3>
+
+<ol>
+<li>BluetoothAdapterのインスタンス取得をするコードを(en1-1)に書きましょう。</li>
+</ol>
+
+<pre><code>btAdapter = BluetoothAdapter.getDefaultAdapter();
+</code></pre>
+
+<ol>
+<li>1.で取得したインスタンスの内容によって処理を分けます。</li>
+</ol>
+
+<pre><code>if (btAdapter == null) {
+    Toast.makeText(getApplicationContext(),
+             “この端末はBluetoothがサポートされていません。”,
+　　　　　　　Toast.LENGTH_SHORT).show();
+    return;
+}
+if (btAdapter.isEnabled()) {
+    Toast.makeText(getApplicationContext(),
+      "Bluetoothは既に有効になっています。", Toast.LENGTH_SHORT)
+      .show();
+}else {
+    // Bluetooth機能を有効にするためのアクションインテントを発行
+    Intent intent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+    // onActivityResultメソッドで結果を受けとるようにする
+    startActivityForResult(intent, REQUEST_BT_ENABLE);
+}
+</code></pre>
 
 <p>We've crafted some handsome templates for you to use. Go ahead and continue to layouts to browse through them. You can easily go back to edit your page before publishing. After publishing your page, you can revisit the page generator and switch to another theme. Your Page content will be preserved if it remained markdown format.</p>
 
