@@ -314,6 +314,55 @@ public void onItemClick(AdapterView&lt;?&gt; parent, View view,
 </code></pre>
 
 <p><em># ここまでできたら確認！</em></p>
+
+<h1>
+<a id="実習2bluetooth接続と文字列データの送受信" class="anchor" href="#%E5%AE%9F%E7%BF%922bluetooth%E6%8E%A5%E7%B6%9A%E3%81%A8%E6%96%87%E5%AD%97%E5%88%97%E3%83%87%E3%83%BC%E3%82%BF%E3%81%AE%E9%80%81%E5%8F%97%E4%BF%A1" aria-hidden="true"><span class="octicon octicon-link"></span></a>[実習2]Bluetooth接続と文字列データの送受信</h1>
+
+<h1>
+<a id="準備-1" class="anchor" href="#%E6%BA%96%E5%82%99-1" aria-hidden="true"><span class="octicon octicon-link"></span></a>準備</h1>
+
+<p>① AndroidStudioで新しいプロジェクトを作成する</p>
+
+<pre><code>プロジェクト名：BluetoothPractice2
+</code></pre>
+
+<p>② 下記の場所にある「BluetoothPractice2」プロジェクトの中の必要なソースコード、リソースファイルをAndroidStudioの「BluetoothPractice2」にコピーする。</p>
+
+<pre><code>（zipの解凍先フォルダ）kaotaro-tech-nwbt-ee67efd
+ &gt; practice &gt; Bluetooth &gt; BluetoothPractice2
+
+コピーするもの
+・BTMessagingThreads.java
+・DeviceSelectActivity.java
+・MessagingActivity.java
+・res &gt; layout &gt; activity_main.xml
+・res &gt; layout &gt; activity_messaging.xml
+・res &gt; menu &gt; menu_main.xml
+・res &gt; values &gt; strings.xml
+</code></pre>
+
+<p>③ AndroidManifest.xmlの修正（下記を参照して過不足あれば修正してください）</p>
+
+<pre><code>&lt;uses-permission android:name="android.permission.BLUETOOTH_ADMIN" /&gt;
+&lt;uses-permission android:name="android.permission.BLUETOOTH" /&gt;
+
+    &lt;application
+        android:allowBackup="true"
+        android:icon="@drawable/ic_launcher"
+        android:label="@string/app_name"
+        android:theme="@style/AppTheme" &gt;
+        &lt;activity android:name=".MessagingActivity" &gt;
+            &lt;intent-filter&gt;
+                &lt;action android:name="android.intent.action.MAIN" /&gt;
+                &lt;category android:name="android.intent.category.LAUNCHER" /&gt;
+            &lt;/intent-filter&gt;
+        &lt;/activity&gt;
+        &lt;activity android:name=".DeviceSelectActivity" &gt;
+        &lt;/activity&gt;
+    &lt;/application&gt;
+</code></pre>
+
+<p><em># ここまでできたら、実機で動かしてみてください。</em></p>
       </section>
     </div>
 
